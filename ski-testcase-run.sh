@@ -4,6 +4,7 @@
 #
 #
 
+export SKI_TESTBASE=$(realpath $(dirname $0))
 
 ## TESTING OPTIONS
 ##XXX: Need to compile after changing from btrfs to the other FS because for btrfs we test more operations (subvolumes, snapshots, etc.)
@@ -42,16 +43,16 @@ export USC_SKI_TOTAL_CPUS=4
 
 VM_TEST_QUIT=${VM_TEST_QUIT-1}
 EMPTY_TEST_FILENAME=${EMPTY_TEST_FILENAME-./empty}
-DEBUG_BINARY=/root/usermode/simple-app/debug
-
+DEBUG_BINARY=$SKI_TESTBASE/debug
+DEBUG_BINARY_STDIN=$SKI_TESTBASE/debug-stdin
 
 if [ $USC_SKI_ENABLED -eq 1 ]
 then
 	# Redirect stdin and stdout to:
 	#  - write the contents on log-vm-test.txt (within the host)
 	#  - send it using the hypercalls so that SKI can show it immediately to the user
-	exec >  >(tee -a log-vm-test.txt | xargs -d '\n' -n 1 ${DEBUG_BINARY})
-	exec 2> >(tee -a log-vm-test.txt | xargs -d '\n' -n 1 ${DEBUG_BINARY} >&2)
+	exec >  >(tee -a log-vm-test.txt | ${DEBUG_BINARY_STDIN})
+	exec 2> >(tee -a log-vm-test.txt | ${DEBUG_BINARY_STDIN})
 else
 	exec >  >(tee -a log-vm-test.txt )
 	exec 2> >(tee -a log-vm-test.txt >&2)
@@ -77,7 +78,7 @@ SKI_ENABLE=1
 	RES=$?
 	if [ "$RES" -ne 0 ]
 	then
-		/root/usermode/simple-app/debug "Error running fsstress"
+		$DEBUG_BINARY "Error running fsstress"
 	fi
 
 )&
