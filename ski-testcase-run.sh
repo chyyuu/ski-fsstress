@@ -9,7 +9,7 @@ export SKI_TESTBASE=$(realpath $(dirname $0))
 ## TESTING OPTIONS
 ##XXX: Need to compile after changing from btrfs to the other FS because for btrfs we test more operations (subvolumes, snapshots, etc.)
 
-export FS_TEST="btrfs"
+export FS_TEST="ntfs"
 
 #export FS_TEST="ext4"
 #export FS_TEST="f2fs"

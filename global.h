@@ -33,6 +33,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+#define NO_XFS
+
 /* xfs-specific includes */
 
 #if defined(NO_XFS)
